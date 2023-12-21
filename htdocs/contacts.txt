@@ -4,22 +4,13 @@
        <div class="Button">Questions on study contact:</div>
        <div class="MenuItem2">Stephen Gingerich</div>
        <div class="MenuItem2">USGS</div>
-       <div class="MenuItem2">2130 SW 5th Ave.</div>
-       <div class="MenuItem2">Portland, OR 97201</div>
-       <div class="MenuItem2">503-251-3216</div>
+       <div class="MenuItem2">601 SW 2nd Avenue, Suite 1950</div>
+       <div class="MenuItem2">Portland, OR 97204</div>
+       <div class="MenuItem2">703-261-5828</div>
 
        <div class="MenuItem2"><a href="mailto:sbginger@usgs.gov">sbginger@usgs.gov</a></div>
       </p>
 
-      <p>
-       <div class="Button">Questions on the grapher contact:</div>
-       <div class="MenuItem2">Leonard L Orzol</div>
-       <div class="MenuItem2">USGS</div>
-       <div class="MenuItem2">2130 SW 5th Ave.</div>
-       <div class="MenuItem2">Portland, OR 97201</div>
-       <div class="MenuItem2">503-251-3270</div>
-     
-       <div class="MenuItem2"><a href="mailto:llorzol@usgs.gov">llorzol@usgs.gov</a></div>
-      </p>
+    
 
  </div>
