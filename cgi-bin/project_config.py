@@ -36,4 +36,3 @@ project_config = {
     "default": '/afs/.usgs.gov/www/staging-or.water/cgi-bin/klamath_wells/data'
 }
 
-
