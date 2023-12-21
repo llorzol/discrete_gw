@@ -1,0 +1,14 @@
+#
+# National Water Information System
+# 2017/04/03
+#
+#
+# Date Retrieved: USGS Water Data for the Nation Help System
+#
+Code	Description
+1s	30s
+D	Date is accurate to the Day
+M	Date is accurate to the Month
+Y	Date is accurate to the Year
+h	Date is accurate to the Hour
+m	Date is accurate to the Minute

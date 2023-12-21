@@ -1,0 +1,28 @@
+#
+# National Water Information System
+# 2017/04/03
+#
+#
+# Date Retrieved: USGS Water Data for the Nation Help System
+#
+Code	Description
+1s	39s
+A	Airline measurement.
+B	Analog or graphic recorder.
+C	Calibrated airline measurement.
+D	Differential Global Positioning System.
+F	Transducer.
+G	Pressure-gage measurement.
+H	Calibrated pressure-gage measurement.
+L	Interpreted from geophysical logs.
+M	Manometer measurement.
+N	Nonrecording gage.
+O	Observed.
+P	Acoustic Pulse measurement.
+R	Reported, method not known.
+S	Steel-tape measurement.
+T	Electric-tape measurement.
+V	Calibrated electric-tape measurement.
+W	Calibrated electric cable.
+X	Uncalibrated electric cable.
+Z	Other.

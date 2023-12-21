@@ -1,0 +1,31 @@
+#
+# National Water Information System
+# August 4, 2021
+#
+#
+# Date Retrieved: USGS Water Data for the Nation Help System
+#
+Code	Description
+1s	51s
+A	Water level was affected by atmospheric pressure.
+B	Water level was affected by tide stage.
+C	Water level was frozen (no water level was recorded).
+D	Site was dry (water level below measurement value).
+E	Site was flowing recently.
+F	Site was flowing. Water level or head could not be measured without additional equipment.
+G	Nearby site that taps the same aquifer was flowing.
+H	Nearby site that taps the same aquifer had been flowing recently.
+I	Recharge water was being injected into the aquifer at this site (Injector site).
+J	Recharge water was being injected into nearby site that taps the same aquifer (Injector site monitor).
+M	Well was not in hydraulic contact with formation.
+N	Measurement was discontinued (no water level was recorded).
+O	Complete obstruction was encountered in the well (no water level was recorded).
+P	Water level was affected by pumping at the time of the measurement.
+R	Water level was affected by recent pumping.
+S	Water level was affected at the time of the measurement by pumping at a nearby site that taps the same aquifer.
+T	Water level was affected recently by pumping at a nearby site that taps the same aquifer.
+V	Foreign substance was present on the surface of the water.
+W	Well was destroyed.
+X	Water level was affected by stage in nearby surface-water site.
+Z	Other conditions existed that may have affected the measured water level.
+9	Static

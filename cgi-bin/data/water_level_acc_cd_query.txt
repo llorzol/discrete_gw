@@ -1,0 +1,14 @@
+#
+# National Water Information System
+# 2017/04/01
+#
+#
+# Date Retrieved: USGS Water Data for the Nation Help System
+#
+Code	Description
+1s	51s
+0	Water level accuracy to nearest foot
+1	Water level accuracy to nearest tenth of a foot
+2	Water level accuracy to nearest hundredth of a foot
+9	Water level accuracy not to nearest foot
+U	Water level accuracy is unknown

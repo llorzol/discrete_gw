@@ -1,0 +1,19 @@
+#
+# National Water Information System
+# 2017/04/03
+#
+#
+# Date Retrieved: USGS Water Data for the Nation Help System
+#
+Code	Description
+1s	85s
+A	Reported by another government agency
+D	From driller's log or report.
+G	Private geologist-consultant or university associate.
+L	Depth interpreted from geophysical logs by personnel of source agency.
+M	Memory (owner, operator, driller).
+O	Reported by owner of well.
+R	Reported by person other than the owner, driller, or another government agency.
+S	Measured by personnel of reporting agency.
+U	Source is unknown.
+Z	Other source (explain in remarks).
