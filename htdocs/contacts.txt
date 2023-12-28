@@ -10,7 +10,4 @@
 
        <div class="MenuItem2"><a href="mailto:sbginger@usgs.gov">sbginger@usgs.gov</a></div>
       </p>
-
-    
-
  </div>
