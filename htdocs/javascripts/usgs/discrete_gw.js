@@ -3,8 +3,8 @@
  * Main is a JavaScript library to graph NwisWeb groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.04
- * December 27, 2023
+ * version 2.05
+ * January 25, 2024
  */
 
 /*
@@ -30,6 +30,18 @@
 # DEALINGS IN THE SOFTWARE.
 ###############################################################################
 */
+// Control for nav bar topics
+//
+jQuery('.noJump').click(function(e){
+
+   // Prevent jumping to top of page
+   //
+   e.preventDefault();
+
+   });
+
+// Global
+//
 var agency_cd;
 var site_id;
 var site_no;
@@ -38,12 +50,6 @@ var station_nm;
 var site_key;
 
 var myGwData;
-
-var aboutFiles     = {
-                      "welcome" :              "graph_welcome.txt",
-                      "graphFeatures" :        "graphFeatures.txt",
-                      "contacts" :             "contacts.txt"
-                     };
                 
 var message = "Incorrectly formatted USGS site number or OWRD well log ID or CDWR well number: ";
 message    += "You must use the USGS station numbers, which are a number ";
@@ -56,17 +62,6 @@ message    += "You must use the CDWR well numbers, which are 18-character string
 //
 $(document).ready(function()
  {
-   // Nav Bar help tooltips
-   //
-   //setHelpTip("#aboutHelp", "Click this for information about this web site.", "right");
-   //setHelpTip("#projectHelp", "Click this to display links to other important web pages.", "bottom");
-   //setHelpTip("#downloadHelp", "Click to download groundwater measurement records.", "bottom");
-      
-   $("#graphs").hide();
-   $("#footer").show();
-   $('#enableTooltip').prop('checked',true);
-  //console.log("callGwService");
-      
    // Current url
    //-------------------------------------------------
    var url     = new URL(window.location.href);  

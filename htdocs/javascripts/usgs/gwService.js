@@ -60,6 +60,7 @@ function callGwService(column, site_id, project)
    //
    message = ["Processing groundwater information for site", site_id, "for project", project].join(' ');
    openModal(message);
+   fadeModal(2000);
 
    // Request for site service information
    //

@@ -4,8 +4,8 @@
  * downloadData is a JavaScript library to provide a set of functions to download
  *  groundwater measurements.
  *
- * version 2.01
- * December 27, 2023
+ * version 2.04
+ * January 24, 2024
 */
 
 /*
@@ -36,8 +36,26 @@
 //-------------------------------------------------
 jQuery("#downloadHelp").click(function() 
   {
-   console.log("Clicked download");
-   downloadData(myGwData);
+   console.log("Downloading data");
+   var pathname = window.location.pathname;
+   console.log("Page " + pathname);
+
+  if(/discrete_gw/i.test(pathname))
+    {
+     downloadGwData(myGwData);
+    }
+  else if(/lithology/i.test(pathname))
+    {
+     downloadLithData(coop_site_no);
+    }
+  else if(/well_construction.html$/i.test(pathname))
+    {
+     requestWellConstructionData(agency_cd, site_no, coop_site_no, station_nm);
+    }
+  else if(/discrete_wq/i.test(pathname))
+    {
+     requestWqData(agency_cd, site_no);
+    }
 });
 
 // Build output
@@ -102,9 +120,9 @@ function requestGwData(agency_cd, site_no, coop_site_no, cdwr_id)
    webRequest(request_type, script_http, data_http, dataType, downloadData);
   }
 
-// Read parameter codes from NwisWeb
+// Download groundwater measurements
 //
-function downloadData(GwInfo)
+function downloadGwData(GwInfo)
   {
    message = "Preparing waterlevel measurements";
    openModal(message);
