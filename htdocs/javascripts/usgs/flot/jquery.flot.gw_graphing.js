@@ -3,8 +3,8 @@
  * Gw_Graphing is a JavaScript library to graph groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.01
- * December 23, 2023
+ * version 2.03
+ * January 27, 2024
  */
 
 /*
@@ -655,23 +655,23 @@ function plotGw(GwInfo)
    
               // Symbol element
               //
-              legend_txt.push('  <div class="col-sm-1">');
+              legend_txt.push('  <div class="legendSymbol col-sm-1">');
    
               if(symbol_type === "line")
                 {
-                  legend_txt.push('   <div id="legend_' + id + '" class="legendLine" style="margin-top: 6px; border-bottom: 4px solid ' + color + ';">&nbsp;</div>');
+                  legend_txt.push('   <div id="legend_' + id + '" class="legendLine" style="border-bottom: 4px solid ' + color + ';">&nbsp;</div>');
                 }
               if(symbol_type === "circle")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendCircle" style="border-color: ' + color + '">&nbsp;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendCircle" style="color: ' + color + '">&#128903;</div>');
                 }
               if(symbol_type === "square")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendRectangle" style="border-color: ' + color + ';">&nbsp;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendSquare" style="color: ' + color + ';">&#128912;</div>');
                 }
               if(symbol_type === "diamond")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendDiamond" style="border-color: ' + color + ';">&nbsp;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendDiamond" style="color: ' + color + ';">&128912;</div>');
                 }
               if(symbol_type === "triangle")
                 {
@@ -679,19 +679,23 @@ function plotGw(GwInfo)
                 }
               if(symbol_type === "cross")
                 {
-                  legend_txt.push('   <div id="legend_' + id + '" class="legendCross" style="color: ' + color + ';">&#10006;</div>');
+                  legend_txt.push('   <div id="legend_' + id + '" class="legendCross" style="color: ' + color + ';">&#128939;</div>');
                 }
               if(symbol_type === "tcross")
                 {
-                  legend_txt.push('   <div id="legend_' + id + '" class="legendCross" style="color: ' + color + ';">&#10010;</div>');
+                  legend_txt.push('   <div id="legend_' + id + '" class="legendCross" style="color: ' + color + ';">&#128931;</div>');
                 }
               if(symbol_type === "downtriangle")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendUpHollowTriangle" style="color: ' + color + ';">&#9661;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendDownHollowTriangle" style="color: ' + color + ';">&#9661;</div>');
                 }
               if(symbol_type === "righttriangle")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendUpHollowTriangle" style="color: ' + color + ';">&#9655;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendRightHollowTriangle" style="color: ' + color + ';">&#9655;</div>');
+                }
+              if(symbol_type === "lefttriangle")
+                {
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendLeftHollowTriangle" style="color: ' + color + ';">&#9655;</div>');
                 }
               legend_txt.push('  </div>');
    
@@ -704,8 +708,9 @@ function plotGw(GwInfo)
               legend_txt.push(' </div>');
              }
   });
-   jQuery(".legendCircle").corner("3px");
 
+   legend_txt.push(' </div">');
+   legend_txt.push('</div>');
    legend_txt.push(' </div">');
    legend_txt.push('</div>');
    jQuery("#Legend").html(legend_txt.join(""));
