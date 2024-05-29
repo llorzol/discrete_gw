@@ -59,90 +59,7 @@ projectDir = project_config.project_config['default']
 
 # Import modules for CGI handling
 #
-from urllib.parse import urlparse, parse_qs
-
-# Parse the Query String
-#
-params = {}
-
-#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301,415104121232901'
-#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301'
-#os.environ['QUERY_STRING'] = 'project=klamath_wells&site_id=417944N1220350W001'
-#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301'
-#os.environ['QUERY_STRING'] = 'project=klamath_wells&site_id=417944N1220350W001'
-    
-if 'QUERY_STRING' in os.environ:
-    queryString = os.environ['QUERY_STRING']
-
-    queryStringD = parse_qs(queryString, encoding='utf-8')
-
-    myParmsL = [
-       'column',
-       'project',
-       'site',
-       'site_id',
-       'site_no',
-       'coop_site_no',
-       'cdwr_id'
-       ]
-    
-    for myParm in myParmsL:
-       myItems = re.escape(queryStringD.get(myParm, [''])[0]).split(',')
-       if len(myItems) > 1:
-          params[myParm] = re.escape(queryStringD.get(myParm, [''])[0])
-       else:
-          params[myParm] = re.escape(myItems[0])
-
-screen_logger.info("\nrequestGwRecords")
-screen_logger.info("params %s" % str(params))
-
-# Check site and column
-#
-keyColumn        = None
-keySite          = None
-
-# Check column
-#
-if len(params['column']) > 0 and len(params['site']) > 0:
-   keySite   = params['site']
-   keyColumn = params['column']
-
-# Check site_id
-#
-elif len(params['site_id']) > 0:
-   keySite   = params['site_id']
-   keyColumn = 'site_id'
-
-# Check site_no
-#
-elif len(params['site_no']) > 0:
-   keySite   = params['site_no']
-   keyColumn = 'site_no'
-
-# Check coop_site_no
-#
-elif len(params['coop_site_no']) > 0:
-   keySite      = params['coop_site_no']
-   keyColumn = 'coop_site_no'
-
-# Check cdwr_id
-#
-elif len(params['cdwr_id']) > 0:
-   keySite      = params['cdwr_id']
-   keyColumn = 'cdwr_id'
-   
-else:
-   message = "Require a NWIS site nmber or OWRD well log ID or CDWR well number"
-   errorMessage(message)
-    
-# Check project path to data files
-#
-if len(params['project']) > 0:
-   pathName   = params['project']
-   projectDir = project_config.project_config[pathName]
-
-screen_logger.info("Site %s" % keySite)
-screen_logger.info("Search column %s" % keyColumn)
+from urllib import parse
 
 # ------------------------------------------------------------
 # -- Set
@@ -150,8 +67,8 @@ screen_logger.info("Search column %s" % keyColumn)
 debug           = False
 
 program         = "USGS OWRD CDWR Groundwater Measurements Loading Script"
-version         = "2.08"
-version_date    = "December 27, 2023"
+version         = "2.09"
+version_date    = "May 29, 2024"
 
 program_args    = []
 
@@ -404,6 +321,91 @@ def processCodes ():
 # ----------------------------------------------------------------------
 parmsDict        = {}
 siteInfoD        = {}
+
+# Parse the Query String
+#
+params = {}
+
+#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301,415104121232901'
+#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301'
+#os.environ['QUERY_STRING'] = 'project=klamath_wells&site_id=417944N1220350W001'
+#os.environ['QUERY_STRING'] = 'project=klamath_wells&column=site_id&site=433152121281301'
+#os.environ['QUERY_STRING'] = 'project=klamath_wells&site_id=417944N1220350W001'
+    
+if 'QUERY_STRING' in os.environ:
+    queryString = os.environ['QUERY_STRING']
+
+    queryStringD = parse.parse_qs(queryString, encoding='utf-8')
+
+    myParmsL = [
+       'column',
+       'project',
+       'site',
+       'site_id',
+       'site_no',
+       'coop_site_no',
+       'cdwr_id'
+       ]
+    
+    for myParm in myParmsL:
+       if myParm in queryStringD:
+          params[myParm] = re.escape(queryStringD[myParm][0])
+
+screen_logger.info("\nrequestGwRecords")
+screen_logger.info("params %s" % str(params))
+
+# Check site and column
+#
+keyColumn        = None
+keySite          = None
+
+# Check column
+#
+if 'column' in params:
+   keyColumn = params['column']
+
+# Check site
+#
+if 'site' in params:
+   keySite   = params['site']
+   keyColumn = 'site_id'
+
+# Check site_id
+#
+elif 'site_id' in params:
+   keySite   = params['site_id']
+   keyColumn = 'site_id'
+
+# Check site_no
+#
+elif 'site_no' in params:
+   keySite   = params['site_no']
+   keyColumn = 'site_no'
+
+# Check coop_site_no
+#
+elif 'coop_site_no' in params:
+   keySite      = params['coop_site_no']
+   keyColumn = 'coop_site_no'
+
+# Check cdwr_id
+#
+elif 'cdwr_id' in params:
+   keySite      = params['cdwr_id']
+   keyColumn = 'cdwr_id'
+   
+else:
+   message = "Require a NWIS site nmber or OWRD well log ID or CDWR well number"
+   errorMessage(message)
+    
+# Check project path to data files
+#
+if 'project' in params:
+   pathName   = params['project']
+   projectDir = project_config.project_config[pathName]
+
+screen_logger.info("Site %s" % keySite)
+screen_logger.info("Search column %s" % keyColumn)
    
 # Set column names
 #
