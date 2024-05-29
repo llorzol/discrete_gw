@@ -3,7 +3,7 @@
  * A JavaScript library to graph NwisWeb groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.05
+ * version 2.06
  * May 29, 2024
  */
 
@@ -85,6 +85,17 @@ function gwService(dataRDB)
   {
    closeModal();
    console.log("gwService");
+   console.log(dataRDB);
+
+   // No waterlevel records
+   //
+   if(!dataRDB)
+   {
+     message = `No groundwater measurements are available for site ${site}`;
+     openModal(message);
+     fadeModal(10000)
+     return false;
+   }
 
    // No waterlevel records
    //
