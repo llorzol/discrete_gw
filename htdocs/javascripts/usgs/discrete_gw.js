@@ -3,8 +3,8 @@
  * Main is a JavaScript library to graph NwisWeb groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.05
- * January 25, 2024
+ * version 2.06
+ * May 29, 2024
  */
 
 /*
@@ -49,6 +49,8 @@ var coop_site_no;
 var station_nm;
 var site_key;
 
+var columns = ['site', 'site_id', 'site_no', 'coop_site_no', 'cdwr_id'];
+
 var myGwData;
                 
 var message = "Incorrectly formatted USGS site number or OWRD well log ID or CDWR well number: ";
@@ -65,7 +67,7 @@ $(document).ready(function()
    // Current url
    //-------------------------------------------------
    var url     = new URL(window.location.href);  
-   console.log("Current Url " + window.location.href);
+   //console.log("Current Url " + window.location.href);
      
    // Parse
    //-------------------------------------------------
@@ -78,40 +80,91 @@ $(document).ready(function()
    coop_site_no = url.searchParams.get('coop_site_no');
    cdwr_id      = url.searchParams.get('cdwr_id');
 
-   if(column !== null && site !== null)
+   // Check arguments
+   //-------------------------------------------------
+   if(site)
+     {
+      site     = checkSiteId(site);
+      site_key = site;
+      if(!column) { column = 'site'; }
+     }
+
+   else if(site_id)
+     {
+      site     = checkSiteId(site_id);
+      site_key = site;
+      if(!column) { column = 'site'; }
+     }
+
+   else if(site_no)
+     {
+      site     = checkSiteId(site_no);
+      site_key = site;
+      if(!column) { column = 'site_no'; }
+     }
+
+   else if(coop_site_no)
+     {
+      site     = checkSiteId(coop_site_no);
+      site_key = site;
+      if(!column) { column = 'coop_site_no'; }
+     }
+
+   else if(cdwr_id)
+     {
+      site     = checkSiteId(cdwr_id);
+      site_key = site;
+      if(!column) { column = 'cdwr_id'; }
+     }
+
+   else
+     {
+       openModal(message);
+       fadeModal(10000)
+       return false;
+     }
+   
+   if(!columns.includes(column))
+     {
+       var message = "Incorrectly entered column name: ";
+       message    += `Enter one of these ${columns.join(', ')}`;
+       openModal(message);
+       fadeModal(10000)
+       return false;
+     }
+
+
+   // Call grapher
+   //-------------------------------------------------
+   if(column && site)
      {
       callGwService(column, site, project);
-      site_key = site;
-     }
-
-   if(site_id !== null)
-     {
-      callGwService("site_id", site_id, project);
-      site_key = site_id;
-     }
-
-   if(site_no !== null)
-     {
-      callGwService("site_no", site_no, project);
-      site_key = site_no;
-     }
-
-   if(coop_site_no !== null)
-     {
-      callGwService("coop_site_no", coop_site_no, project);
-      site_key = coop_site_no;
-     }
-
-   if(cdwr_id !== null)
-     {
-      callGwService("cdwr_id", cdwr_id, project);
-      site_key = cdwr_id;
      }
 });
 
+function checkSiteId(site_id) {
+
+    if(!site_id)
+      {
+        openModal(message);
+        fadeModal(10000)
+        return false;
+      }
+    site_id  = site_id.trim();
+    var myRe = /^[a-z0-9]+$/i;
+    if(!myRe.test(site_id))
+      {
+        openModal(message);
+        fadeModal(10000)
+        return false;
+      }
+
+    return site_id;
+}
+
 function checkSiteNo(site_no) {
 
-    if(typeof site_no === "undefined")
+    if(!site_no)
       {
         var message = "Incorrectly formatted USGS site number: ";
         message    += "You must use the USGS station numbers, which are a number ";
