@@ -3,7 +3,7 @@
  * Main is a JavaScript library to graph NwisWeb groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.06
+ * version 2.08
  * May 29, 2024
  */
 
@@ -129,37 +129,60 @@ $(document).ready(function()
        var message = "Incorrectly entered column name: ";
        message    += `Enter one of these ${columns.join(', ')}`;
        openModal(message);
-       fadeModal(10000)
+       fadeModal(6000)
        return false;
+     }
+   
+   if(project)
+     {
+      project = checkProject(project);
+     }
+   else
+     {
+      project = 'klamath_wells';
      }
 
 
    // Call grapher
    //-------------------------------------------------
-   if(column && site)
+   if(column && site && project)
      {
       callGwService(column, site, project);
      }
 });
 
-function checkSiteId(site_id) {
+function checkSiteId(site) {
 
-    if(!site_id)
+    if(!site)
       {
         openModal(message);
-        fadeModal(10000)
+        fadeModal(6000)
         return false;
       }
-    site_id  = site_id.trim();
+    site  = site.trim();
     var myRe = /^[a-z0-9]+$/i;
-    if(!myRe.test(site_id))
+    if(!myRe.test(site))
       {
         openModal(message);
-        fadeModal(10000)
+        fadeModal(6000)
         return false;
       }
 
-    return site_id;
+    return site;
+}
+
+function checkProject(project) {
+    project       = project.trim();
+    var myProject = /^[A-Za-z0-9_]+$/;
+    if(!myProject.test(project))
+      {
+        var message = "Incorrectly formatted USGS project name";
+        openModal(message);
+        fadeModal(6000)
+        return false;
+      }
+
+    return project;
 }
 
 function checkSiteNo(site_no) {
