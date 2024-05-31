@@ -3,8 +3,8 @@
  * Main is a JavaScript library to graph NwisWeb groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.08
- * May 29, 2024
+ * version 2.10
+ * May 30, 2024
  */
 
 /*
@@ -149,113 +149,10 @@ $(document).ready(function()
      {
       callGwService(column, site, project);
      }
+   else
+     {
+       openModal(message);
+       fadeModal(6000)
+       return false;
+     }
 });
-
-function checkSiteId(site) {
-
-    if(!site)
-      {
-        openModal(message);
-        fadeModal(6000)
-        return false;
-      }
-    site  = site.trim();
-    var myRe = /^[a-z0-9]+$/i;
-    if(!myRe.test(site))
-      {
-        openModal(message);
-        fadeModal(6000)
-        return false;
-      }
-
-    return site;
-}
-
-function checkProject(project) {
-    project       = project.trim();
-    var myProject = /^[A-Za-z0-9_]+$/;
-    if(!myProject.test(project))
-      {
-        var message = "Incorrectly formatted USGS project name";
-        openModal(message);
-        fadeModal(6000)
-        return false;
-      }
-
-    return project;
-}
-
-function checkSiteNo(site_no) {
-
-    if(!site_no)
-      {
-        var message = "Incorrectly formatted USGS site number: ";
-        message    += "You must use the USGS station numbers, which are a number ";
-        message    += "from 8 to 15 digits long. ";
-        openModal(message);
-        fadeModal(10000)
-        return false;
-      }
-    //site_no  = site_no.trim();
-    site_no  = site_no.replace(/^\s+|\s+$/g,'');
-    var myRe = /^(\d{8,15})$/g;
-    if(!myRe.test(site_no))
-      {
-        var message = "Incorrectly formatted USGS site number: ";
-        message    += "You must use the USGS station numbers, which are a number ";
-        message    += "from 8 to 15 digits long. ";
-        openModal(message);
-        fadeModal(10000)
-        return false;
-      }
-
-    return site_no;
-}
-
-function checkSiteId(site_id) {
-                
-    if(typeof site_id === "undefined")
-      {
-        openModal(message);
-        fadeModal(10000)
-        return null;
-      }
-                
-    site_id  = site_id.trim();
-
-    // Test for USGS site number
-    //
-    var myRe = /^(\d{8,15})$/g;
-    if(myRe.test(site_id))
-      {
-        return site_id;
-      }
-
-    // Test for OWRD well log ID
-    //
-    var myRe = /^([a-z]{4}){1}\s*(\d+)$/i;
-    if(myRe.test(site_id))
-      {
-        var countyNam  = site_id.substring(0,4).toUpperCase();
-        //console.log("countyNam_id " + countyNam);
-        var wellId     = site_id.substring(4).trim();
-        //console.log("wellId_id " + wellId);
-        var site_id    = countyNam + ('0000000' + wellId).slice(-7);
-        return site_id;
-      }
-                   
-    // Test for CDWR well number
-    //
-    var myRe = /^([a-z0-9]{18})$/i;
-    if(myRe.test(site_id))
-      {
-        return site_id;
-      }
-                   
-    // Return
-    //
-    openModal(message);
-    fadeModal(10000)
-               
-    return null;
-}
