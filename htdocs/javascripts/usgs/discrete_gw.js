@@ -80,44 +80,81 @@ $(document).ready(function()
    coop_site_no = url.searchParams.get('coop_site_no');
    cdwr_id      = url.searchParams.get('cdwr_id');
 
+   //console.log(`Site site ${site}`);
+   //console.log(`Site site_id ${site_id}`);
+   //console.log(`Site site_no ${site_no}`);
+   //console.log(`Site coop_site_no ${coop_site_no}`);
+   //console.log(`Site cdwr_id ${cdwr_id}`);
+   //console.log(`Column ${column}`);
+   //console.log(`Project ${project}`);
+     
    // Check arguments
    //-------------------------------------------------
    if(site)
      {
-      site     = checkSiteId(site);
+       if(!checkSiteId(site))
+          {
+            openModal(message);
+            fadeModal(3000);
+            return;
+          }
       site_key = site;
       if(!column) { column = 'site'; }
      }
 
-   else if(site_id)
+   if(site_id)
      {
-      site     = checkSiteId(site_id);
+       if(!checkSiteId(site_id))
+          {
+            openModal(message);
+            fadeModal(3000);
+            return;
+          }
+      site     = site_id;
       site_key = site;
-      if(!column) { column = 'site'; }
+      if(!column) { column = 'site_id'; }
      }
 
-   else if(site_no)
+   if(site_no)
      {
-      site     = checkSiteId(site_no);
+       if(!checkSiteNo(site_no))
+          {
+            openModal(message);
+            fadeModal(3000);
+            return;
+          }
+      site     = site_no;
       site_key = site;
       if(!column) { column = 'site_no'; }
      }
 
-   else if(coop_site_no)
+   if(coop_site_no)
      {
-      site     = checkSiteId(coop_site_no);
+       if(!checkCoopSiteNo(coop_site_no))
+          {
+            openModal(message);
+            fadeModal(3000);
+            return;
+          }
+      site     = coop_site_no;
       site_key = site;
       if(!column) { column = 'coop_site_no'; }
      }
 
-   else if(cdwr_id)
+   if(cdwr_id)
      {
-      site     = checkSiteId(cdwr_id);
+       if(!checkCdwrId(cdwr_id))
+          {
+            openModal(message);
+            fadeModal(3000);
+            return;
+          }
+      site     = cdwr_id;
       site_key = site;
       if(!column) { column = 'cdwr_id'; }
      }
 
-   else
+   if(!site)
      {
        openModal(message);
        fadeModal(10000)
@@ -141,6 +178,8 @@ $(document).ready(function()
      {
       project = 'klamath_wells';
      }
+   //console.log('Project');
+   //console.log(project);
 
 
    // Call grapher
