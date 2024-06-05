@@ -3,8 +3,8 @@
  * Gw_Graphing is a JavaScript library to graph groundwater information
  * such as the discrete groundwater measurements for a site(s).
  *
- * version 2.04
- * January 27, 2024
+ * version 2.05
+ * June 4, 2024
  */
 
 /*
@@ -663,15 +663,15 @@ function plotGw(GwInfo)
                 }
               if(symbol_type === "circle")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendCircle" style="color: ' + color + '">&#128903;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendCircle" style="color: ' + color + '">&#9675;</div>');
                 }
               if(symbol_type === "square")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendSquare" style="color: ' + color + ';">&#128912;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendSquare" style="color: ' + color + ';">&#9643;</div>');
                 }
               if(symbol_type === "diamond")
                 {
-                 legend_txt.push('   <div id="legend_' + id + '" class="legendDiamond" style="color: ' + color + ';">&128912;</div>');
+                 legend_txt.push('   <div id="legend_' + id + '" class="legendDiamond" style="color: ' + color + ';">&9671;</div>');
                 }
               if(symbol_type === "triangle")
                 {
