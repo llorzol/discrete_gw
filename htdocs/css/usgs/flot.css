@@ -3,8 +3,8 @@
  * flot.css is a CSS file to specify styling
  *  information such as the discrete water-quality measurements for a site(s).
  *
- * version 2.03
- * June 3, 2024
+ * version 2.04
+ * June 5, 2024
  */
 
 /*
@@ -301,8 +301,8 @@
     position: relative;
     font-family: "Lucida Sans Unicode", "Arial Unicode MS";
     font-weight: bold;
-    font-size: 1.0rem;
-    bottom: 0.3rem;
+    font-size: 1.25rem;
+    bottom: 0.6rem;
     background: transparent;
    } 
 
@@ -311,8 +311,8 @@
     position: relative;
     font-family: "Lucida Sans Unicode", "Arial Unicode MS";
     font-weight: bold;
-    font-size: 1.0rem;
-    bottom: 0.3rem;
+    font-size: 1.25rem;
+    bottom: 0.6rem;
     background: transparent;
    } 
 
