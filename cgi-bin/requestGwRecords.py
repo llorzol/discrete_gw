@@ -35,6 +35,8 @@ import os, sys, string, re
 
 import datetime
 
+import csv
+
 import json
 
 # Set up logging
@@ -67,8 +69,8 @@ from urllib import parse
 debug           = False
 
 program         = "USGS OWRD CDWR Groundwater Measurements Loading Script"
-version         = "2.09"
-version_date    = "May 29, 2024"
+version         = "2.10"
+version_date    = "February 20, 2025"
 
 program_args    = []
 
@@ -80,11 +82,11 @@ def errorMessage(error_message):
    sys.exit()
 
 # =============================================================================
-def processCollectionSites (collection_file, mySiteFields, keyColumn, keySite):
+def processCollectionSites (file, keyColumn, keySite):
 
-   siteInfoD   = {}
+   siteInfoD = []
 
-   keyList     = keySite.split()
+   keyList   = keySite.upper().split()
 
    screen_logger.info("\nprocessCollectionSites")
    screen_logger.info("Key %s" % "\t".join(keyList))
@@ -93,67 +95,42 @@ def processCollectionSites (collection_file, mySiteFields, keyColumn, keySite):
    # Read collection file
    # -------------------------------------------------
    #
-   with open(collection_file,'r') as f:
-       linesL = f.read().splitlines()
+   try:
+       with open(file, "r") as fh:
+           csv_reader = csv.DictReader(filter(lambda row: row[0]!='#', fh), delimiter='\t')
 
-   # Parse for column names [rdb format]
-   #
-   while len(linesL) > 0:
-         
-      Line = linesL[0].strip("\n|\r")
-      del linesL[0]
+           # Loop through file
+           #
+           for tempD in csv_reader:
 
-      # Grab column names in header
-      #
-      if Line[0] != '#':
-         namesL = Line.split('\t')
-         break
+                # Check for sites with no valid location
+                #
+                if tempD[keyColumn].upper() in keyList:
 
-   # Format line in header section
-   #
-   del linesL[0]
+                    # Set empty value to None
+                    #
+                    for key, value in tempD.items():
+                        if len(value) < 1:
+                            tempD[key] = None
+                            
+                    siteInfoD.append(tempD)
 
-   # Check column names
-   #
-   if keyColumn not in namesL: 
-      message = "Missing index column " + keyColumn
-      errorMessage(message)
-
-   # Parse data lines
-   #
-   while len(linesL) > 0:
-      
-      if len(linesL[0]) < 1:
-         del linesL[0]
-         continue
-      
-      if linesL[0][0] == '#':
-         del linesL[0]
-         continue
-
-      Line = linesL[0]
-      del linesL[0]
-
-      valuesL = Line.split('\t')
-
-      tmpSite = str(valuesL[ namesL.index(keyColumn) ])
-
-      # Check for site records
-      #
-      if tmpSite in keyList:
-      
-         for column in mySiteFields:
-            if column in namesL:
-               siteInfoD[column] = valuesL[ namesL.index(column) ]
-            else:
-               siteInfoD[column] = ''
+   except FileNotFoundError:
+       message = 'File %s not found' % file
+       errorMessage(message)
+   except PermissionError:
+       message = 'No permission to access file %s' % file
+       errorMessage(message)
+   except Exception as e:
+       message = 'An error occurred: %s' % e
+       errorMessage(message)
     
    message = "Processed site %s" % keySite
    screen_logger.info(message)
    
    return siteInfoD
 # =============================================================================
-def processWls (waterlevel_file, myGwFields, keyColumn, keySite):
+def processWls (file, keyColumn, keySite):
 
    serviceL    = []
 
@@ -166,72 +143,43 @@ def processWls (waterlevel_file, myGwFields, keyColumn, keySite):
    # Read waterlevel file
    # -------------------------------------------------
    #
-   with open(waterlevel_file,'r') as f:
-       linesL = f.read().splitlines()
-   
-   # Parse head lines
-   #
-   while len(linesL) > 0:
-         
-      Line = linesL[0].strip("\n|\r")
-      del linesL[0]
+   try:
+       with open(file, "r") as fh:
+           csv_reader = csv.DictReader(filter(lambda row: row[0]!='#', fh), delimiter='\t')
 
-      # Grab column names in header
-      #
-      if Line[0] != '#':
-         namesL = Line.split('\t')
-         break
+           # Loop through file
+           #
+           for tempD in csv_reader:
 
-   # Format line in header section
-   #
-   #del linesL[0]
+                # Check for sites with no valid location
+                #
+                if tempD[keyColumn].upper() in keyList:
+                    #screen_logger.info('keyColumn %s' % tempD[keyColumn])
+                    # Set empty value to None
+                    #
+                    for key, value in tempD.items():
+                        if len(value) < 1:
+                            tempD[key] = None
 
-   # Check column names
-   #
-   if keyColumn not in namesL:
-      message = "Missing index column " + keyColumn
-      errorMessage(message)
+                    serviceL.append(tempD)
 
-   # Parse data lines
-   #
-   while len(linesL) > 0:
-      
-      if len(linesL[0]) < 1:
-         del linesL[0]
-         continue
-      
-      if linesL[0][0] == '#':
-         del linesL[0]
-         continue
+                # Check for site records
+                #
+                else:
+                    if len(serviceL) > 0:
 
-      Line = linesL[0]
-      del linesL[0]
+                        serviceL = sorted(serviceL, key=lambda x: x['lev_dtm'])
+                        break
 
-      valuesL = Line.split('\t')
-
-      tmpSite = str(valuesL[ namesL.index(keyColumn) ])
-
-      # Check for site records
-      #
-      if tmpSite in keyList:
-
-         recordD      = {}
-      
-         for column in myGwFields:
-            if column in namesL:
-               recordD[column] = valuesL[ namesL.index(column) ]
-            else:
-               recordD[column] = ''
-
-         serviceL.append(recordD)
-
-      # Check for site records
-      #
-      else:
-         if len(serviceL) > 0:
-
-            serviceL = sorted(serviceL, key=lambda x: x['lev_dtm'])
-            break
+   except FileNotFoundError:
+       message = 'File %s not found' % file
+       errorMessage(message)
+   except PermissionError:
+       message = 'No permission to access file %s' % file
+       errorMessage(message)
+   except Exception as e:
+       message = 'An error occurred: %s' % e
+       errorMessage(message)
     
    message = "Processed %d record" % len(serviceL)
    screen_logger.info(message)
@@ -261,56 +209,37 @@ def processCodes ():
    
    for code in codeFiles:
    
-      codeFile = codeFiles[code]
+      file = codeFiles[code]
    
       if code not in codesD:
          codesD[code] = {}
       
-      if os.path.exists(codeFile):
-      
-         # Open discretization file
-         #
-         fh = open(codeFile, 'r')
-         if fh is None:
-            message = "Can not open code file %s" % codeFile
-            errorMessage(message)
-      
-         contentL = fh.readlines()
-      
-         fh.close()
-      
-         if len(contentL) > 0:
-         
-            # Parse head lines
-            #
-            while len(contentL) > 0:
-                  
-               Line = contentL[0].strip("\n|\r")
-               del contentL[0]
-         
-               # Grab column names in header
-               #
-               if Line[0] != '#':
-                  namesL = Line.split('\t')
-                  break
-         
-            # Format line in header section
-            #
-            del contentL[0]
-   
-            # Parse data lines
-            #
-            while len(contentL) > 0:
-         
-               Line = contentL[0].strip("\n|\r")
-               del contentL[0]
-         
-               valuesL = Line.split('\t')
-   
-               codeColumn = str(valuesL[ namesL.index('Code') ])
-               codeValue  = str(valuesL[ namesL.index('Description') ])
-   
-               codesD[code][codeColumn] = codeValue
+      if os.path.exists(file):
+
+          # Open file
+          #
+          try:
+              with open(file, "r") as fh:
+                  csv_reader = csv.DictReader(filter(lambda row: row[0]!='#', fh), delimiter='\t')
+
+                  # Loop through file
+                  #
+                  for tempD in csv_reader:
+
+                      codeColumn = str(tempD['Code'])
+                      codeValue  = str(tempD['Description'])
+
+                      codesD[code][codeColumn] = codeValue
+
+          except FileNotFoundError:
+              message = 'File %s not found' % file
+              errorMessage(message)
+          except PermissionError:
+              message = 'No permission to access file %s' % file
+              errorMessage(message)
+          except Exception as e:
+              message = 'An error occurred: %s' % e
+              errorMessage(message)
    
    return codesD
 
@@ -406,48 +335,13 @@ if 'project' in params:
 
 screen_logger.info("Site %s" % keySite)
 screen_logger.info("Search column %s" % keyColumn)
+
    
-# Set column names
-#
-mySiteFields = [
-                "site_id",
-                "agency_cd",
-                "site_no",
-                "coop_site_no",
-                "cdwr_id",
-                "state_well_nmbr",
-                "station_nm",
-                "dec_lat_va",
-                "dec_long_va",
-                "alt_va",
-                "alt_acy_va",
-                "alt_datum_cd"
-               ]
+# Obtain codes and explanations
+# -------------------------------------------------
+codesD = processCodes()
+
    
-# Set column names
-#
-myGwFields = [
-                "site_id",
-                "site_no",
-                "agency_cd",
-                "coop_site_no",
-                "cdwr_id",
-                "lev_va",
-                "lev_acy_cd",
-                "lev_dtm",
-                "lev_dt",
-                "lev_tm",
-                "lev_tz_cd",
-                "lev_dt_acy_cd",
-                "lev_str_dt",
-                "lev_status_cd",
-                "lev_meth_cd",
-                "lev_agency_cd",
-                "lev_src_cd",
-                "lev_web_cd",
-                "lev_rmk_tx"
-               ]
-      
 # Set project directory
 #
 collection_file  = "/".join([projectDir, "collection.txt"])
@@ -462,7 +356,7 @@ if os.path.exists(collection_file):
 
    # Process file
    #
-   siteInfoD = processCollectionSites(collection_file, mySiteFields, keyColumn, keySite)
+   siteInfoD = processCollectionSites(collection_file, keyColumn, keySite)
    
 else:
    message = "Require the path to the collection file with the list of sites"
@@ -474,16 +368,11 @@ if os.path.exists(waterlevel_file):
 
    # Process file
    #
-   siteInfoL = processWls(waterlevel_file, myGwFields, keyColumn, keySite)
+   siteInfoL = processWls(waterlevel_file, keyColumn, keySite)
    
 else:
    message = "Require the path to the waterlevel file with the list of measurements"
    errorMessage(message)
-
-   
-# Obtain codes and explanations
-# -------------------------------------------------
-codesD = processCodes()
 
 
 # Prepare JSON output
@@ -491,6 +380,31 @@ codesD = processCodes()
 #
 message = "Outputting %d waterlevel measurements for site" % len(siteInfoD)
 screen_logger.info(message)
+
+jsonD = { "siteinfo" : siteInfoD,
+          "waterlevels" : siteInfoL,
+          "codes" : codesD
+          }
+          
+
+# Output json
+# -------------------------------------------------
+#
+print("Content-type:application/json\n\n")
+print('%s' % json.dumps(jsonD))
+
+
+sys.exit()
+
+
+
+
+
+
+
+
+
+
 
 jsonL = []
 jsonL.append('{')
